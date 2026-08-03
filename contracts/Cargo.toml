@@ -1,3 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["contracts/placeholder"]
+members = ["batch_registry", "parametric_cover"]
+
+[workspace.dependencies]
+soroban-sdk = "21.7.7"

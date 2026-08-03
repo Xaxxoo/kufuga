@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 
-export interface AnchorCandidate { deviceId: string; periodStart: number; periodEnd: number; sha256: string; readingCount: number; }
+export interface AnchorCandidate { deviceId: string; farmId: string; periodStart: number; periodEnd: number; sha256: string; readingCount: number; }
 export interface ManageDataInput { name: string; value: Buffer; }
 
 export function makeManageDataInputs(candidates: readonly AnchorCandidate[]): ManageDataInput[] {

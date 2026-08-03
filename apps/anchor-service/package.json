@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": { "build": "tsc -p tsconfig.json", "lint": "eslint . --ext .ts", "test": "vitest run" },
   "dependencies": {
+    "@kufuga/contracts-sdk": "0.1.0",
     "@kufuga/db": "0.1.0",
     "@kufuga/shared": "0.1.0",
     "@nestjs/common": "^10.4.15",

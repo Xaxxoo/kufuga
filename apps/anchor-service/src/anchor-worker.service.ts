@@ -2,6 +2,7 @@ import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hashReadings, type TelemetryReading } from '@kufuga/shared';
+import { BatchRegistryClient } from '@kufuga/contracts-sdk';
 import { AnchorBatchEntity, DeviceEntity, ReadingEntity } from '@kufuga/db';
 import { Horizon, Keypair, Memo, Networks, Operation, TransactionBuilder } from '@stellar/stellar-sdk';
 import { createHash } from 'node:crypto';
@@ -56,7 +57,7 @@ export class AnchorWorkerService implements OnModuleInit {
         const exists = await this.anchors.findOne({ where: { deviceId: device.id, periodStart } });
         if (!exists) {
           const rows = await this.readings.createQueryBuilder('r').where('r.deviceId = :deviceId', { deviceId: device.id }).andWhere('r.ts >= :periodStart AND r.ts < :periodEnd', { periodStart, periodEnd }).orderBy('r.ts', 'ASC').getMany();
-          if (rows.length) candidates.push({ deviceId: device.id, periodStart, periodEnd, readingCount: rows.length, sha256: hashReadings(rows.map((row) => this.toTelemetry(row))) });
+          if (rows.length) candidates.push({ deviceId: device.id, farmId: device.farmId, periodStart, periodEnd, readingCount: rows.length, sha256: hashReadings(rows.map((row) => this.toTelemetry(row))) });
         }
         periodStart += HOUR;
       }
@@ -83,6 +84,15 @@ export class AnchorWorkerService implements OnModuleInit {
       return { hash: result.hash, ledger: result.ledger ?? 0 };
     });
     await this.anchors.insert(candidates.map((candidate) => this.anchors.create({ deviceId: candidate.deviceId, periodStart: candidate.periodStart, periodEnd: candidate.periodEnd, readingCount: candidate.readingCount, sha256: candidate.sha256, stellarTxHash: txHash.hash, ledger: String(txHash.ledger), anchoredAt: Math.floor(Date.now() / 1000) })));
+    await this.registerBatches(candidates);
+  }
+
+  private async registerBatches(candidates: readonly AnchorCandidate[]): Promise<void> {
+    if (!config.batchRegistryContractId || !config.secretKey) return;
+    const client = new BatchRegistryClient({ rpcUrl: config.rpcUrl, contractId: config.batchRegistryContractId, secretKey: config.secretKey });
+    for (const candidate of candidates) {
+      await this.withRetry(() => client.registerBatch({ farm: candidate.farmId, device: candidate.deviceId, periodStart: candidate.periodStart, periodEnd: candidate.periodEnd, readingCount: candidate.readingCount, sha256: candidate.sha256 }));
+    }
   }
 
   private async withRetry<T>(operation: () => Promise<T>): Promise<T> {

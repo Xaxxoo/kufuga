@@ -23,6 +23,19 @@ npm --workspace @kufuga/api run migration:run
 npm --workspace @kufuga/api run start:dev
 ```
 
+Run the mobile app against that API with Expo:
+
+```bash
+EXPO_PUBLIC_API_URL=http://YOUR_LAN_IP:3000 npm --workspace @kufuga/mobile run start
+pnpm sim --devices 5 --speed 60x
+```
+
+Use your computer's LAN IP from a physical phone; `localhost` inside a phone or emulator points to the phone/emulator itself. The mobile app keeps recent React Query data in AsyncStorage for low-bandwidth, read-only offline viewing and registers Expo push tokens through `POST /auth/push-token`.
+
 For the dedicated integration database, ensure PostgreSQL is running, then use `npm --workspace @kufuga/api run test:integration`; the setup script creates and drops `poultry_stellar_test` without testcontainers.
 
 The local telemetry stand-in publishes to Mosquitto with `pnpm sim --devices 5 --speed 60x`; add `--scenario heatwave` to exercise elevated temperature and humidity alerts. The ESP32 firmware can be built with PlatformIO from `firmware/sensor-node`.
+
+## How trust works
+
+Every closed UTC hour, the anchor service takes the canonical, sorted JSON representation of each device's readings and computes a SHA-256 hash. It writes the first 28 bytes into a Stellar TESTNET `manage_data` operation under `ph:<deviceId>:<periodStartUnix>` and places a batch hash in the transaction's `MEMO_HASH`; the complete hash remains in Postgres in the `anchor_batches` record. The API verification endpoint recomputes the readings hash, checks the Stellar transaction and operation, and returns a Stellar Expert link, allowing lenders and insurers to detect changes to the audit trail without trusting the application database alone.

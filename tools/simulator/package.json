@@ -1,0 +1,9 @@
+{
+  "name": "@kufuga/simulator",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "dev": "tsx src/index.ts", "build": "tsc -p tsconfig.json", "lint": "eslint . --ext .ts" },
+  "dependencies": { "@kufuga/shared": "0.1.0", "mqtt": "^5.10.3" },
+  "devDependencies": { "tsx": "^4.19.2" }
+}

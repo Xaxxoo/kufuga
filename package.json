@@ -3,13 +3,14 @@
   "private": true,
   "version": "0.1.0",
   "packageManager": "npm@10.8.2",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": ["apps/*", "packages/*", "tools/*"],
   "scripts": {
     "build": "turbo run build",
     "lint": "turbo run lint",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "sim": "pnpm --filter @kufuga/simulator run dev --"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",

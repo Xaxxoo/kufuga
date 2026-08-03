@@ -16,3 +16,5 @@ npm run build
 ```
 
 The TypeScript packages are intentionally empty scaffolds. Start the infrastructure with `docker compose up`; Mosquitto is available on `localhost:1883` and Postgres on `localhost:5432` (`kufuga` / `kufuga`).
+
+The local telemetry stand-in publishes to Mosquitto with `pnpm sim --devices 5 --speed 60x`; add `--scenario heatwave` to exercise elevated temperature and humidity alerts. The ESP32 firmware can be built with PlatformIO from `firmware/sensor-node`.

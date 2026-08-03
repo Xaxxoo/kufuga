@@ -23,6 +23,20 @@ npm --workspace @kufuga/api run migration:run
 npm --workspace @kufuga/api run start:dev
 ```
 
+Create an admin account for the operations console, then start the web app:
+
+```bash
+npm --workspace @kufuga/api run seed:admin
+cp apps/web/.env.example apps/web/.env.local
+npm --workspace @kufuga/web run dev
+```
+
+Set `ADMIN_EMAIL` and `ADMIN_PASSWORD` before `seed:admin` when overriding the
+development defaults. Open `http://localhost:3001/admin` for the authenticated
+operations console and `http://localhost:3001/investors` for the public,
+anonymized investor view. The web app proxies API requests through same-origin
+routes and stores the admin JWT in an httpOnly cookie.
+
 Run the mobile app against that API with Expo:
 
 ```bash
@@ -35,6 +49,15 @@ Use your computer's LAN IP from a physical phone; `localhost` inside a phone or 
 For the dedicated integration database, ensure PostgreSQL is running, then use `npm --workspace @kufuga/api run test:integration`; the setup script creates and drops `poultry_stellar_test` without testcontainers.
 
 The local telemetry stand-in publishes to Mosquitto with `pnpm sim --devices 5 --speed 60x`; add `--scenario heatwave` to exercise elevated temperature and humidity alerts. The ESP32 firmware can be built with PlatformIO from `firmware/sensor-node`.
+
+Soroban contracts live in `contracts/`: `batch_registry` records authorized
+hourly hashes and `parametric_cover` holds the MVP temperature-cover logic.
+See `contracts/README.md` and `contracts/scripts/deploy-testnet.sh` for TESTNET
+deployment. After deployment, set `BATCH_REGISTRY_CONTRACT_ID`,
+`STELLAR_RPC_URL`, and `STELLAR_SECRET_KEY` in the anchor service so each
+hourly batch is also registered on-chain. The API exposes farmer policy status
+at `GET /farms/:id/policies`; the mobile Records screen and public investor
+view display those statuses.
 
 ## How trust works
 

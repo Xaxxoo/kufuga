@@ -12,10 +12,13 @@ import { MqttIngestService } from './mqtt-ingest.service';
 import { OfflineService } from './offline.service';
 import { NotificationsModule } from './notifications/notifications.module';
 import { AnchorVerificationService } from './anchor-verification.service';
+import { AdminReadController } from './admin-read.controller';
+import { PublicInvestorController } from './public-investor.controller';
+import { PoliciesController } from './policies.controller';
 
 @Module({
   imports: [DatabaseModule, ScheduleModule.forRoot(), AuthModule, NotificationsModule, TypeOrmModule.forFeature(apiEntities)],
-  controllers: [FarmsController, DevicesController, AlertsController, AdminController],
+  controllers: [FarmsController, DevicesController, AlertsController, AdminController, AdminReadController, PublicInvestorController, PoliciesController],
   providers: [MqttIngestService, OfflineService, AnchorVerificationService],
 })
 export class AppModule {}

@@ -7,6 +7,7 @@ import { config } from '../config';
 import { FarmEntity, UserEntity } from '../database/entities';
 import { LoginDto, RegisterDto } from './dto';
 import { PushTokenDto } from './push-token.dto';
+import { AdminLoginDto } from './admin-login.dto';
 
 @Injectable()
 export class AuthService {
@@ -36,8 +37,14 @@ export class AuthService {
     return { registered: true };
   }
 
+  async adminLogin(dto: AdminLoginDto) {
+    const user = await this.users.findOneBy({ email: dto.email.toLowerCase(), role: 'admin' });
+    if (!user?.passwordHash || !(await compare(dto.password, user.passwordHash))) throw new UnauthorizedException('Invalid admin credentials');
+    return this.issueToken(user);
+  }
+
   private issueToken(user: UserEntity) {
-    const payload = { id: user.id, phone: user.phone, role: user.role, farmId: user.farmId };
+    const payload = { id: user.id, phone: user.phone, email: user.email, role: user.role, farmId: user.farmId };
     return { accessToken: this.jwt.sign(payload, { secret: config.jwtSecret }), user: payload };
   }
 }

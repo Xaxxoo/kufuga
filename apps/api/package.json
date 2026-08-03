@@ -9,6 +9,7 @@
     "migration:generate": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:generate src/database/migrations/Auto",
     "migration:run": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:run",
     "migration:revert": "typeorm-ts-node-commonjs -d src/database/data-source.ts migration:revert",
+    "seed:admin": "tsx src/test/seed-admin.ts",
     "test:integration": "tsx src/test/setup-db.ts create && vitest run --config vitest.config.ts; status=$?; tsx src/test/setup-db.ts drop; exit $status",
     "test:db:create": "tsx src/test/setup-db.ts create",
     "test:db:drop": "tsx src/test/setup-db.ts drop"

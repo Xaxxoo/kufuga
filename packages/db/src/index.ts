@@ -29,7 +29,9 @@ export class FarmEntity {
 export class UserEntity {
   @PrimaryGeneratedColumn('uuid') id!: string;
   @Column({ type: 'varchar', unique: true }) phone!: string;
+  @Column({ type: 'varchar', unique: true, nullable: true }) email!: string | null;
   @Column('varchar') pinHash!: string;
+  @Column({ type: 'varchar', nullable: true }) passwordHash!: string | null;
   @Column({ type: 'varchar', default: 'farmer' }) role!: 'farmer' | 'admin';
   @Column({ type: 'uuid', nullable: true }) farmId!: string | null;
   @Column({ type: 'varchar', nullable: true }) pushToken!: string | null;
@@ -110,4 +112,19 @@ export class AnchorBatchEntity {
   @Column({ type: 'bigint', transformer: unixTransformer }) anchoredAt!: number;
 }
 
-export const apiEntities = [FarmEntity, UserEntity, DeviceEntity, ReadingEntity, AlertEntity, SmsDeliveryEntity, AnchorBatchEntity];
+@Entity('policies')
+@Index('IDX_policies_farm_device', ['farmId', 'deviceId'])
+export class PolicyEntity {
+  @PrimaryGeneratedColumn('uuid') id!: string;
+  @Column('uuid') farmId!: string;
+  @Column('uuid') deviceId!: string;
+  @Column('varchar', { default: 'TempHigh' }) peril!: 'TempHigh';
+  @Column('integer') threshold!: number;
+  @Column('integer') consecutivePeriods!: number;
+  @Column('bigint', { transformer: unixTransformer }) payoutAmount!: number;
+  @Column('bigint', { transformer: unixTransformer }) premium!: number;
+  @Column('varchar', { default: 'active' }) status!: 'active' | 'paid' | 'cancelled';
+  @CreateDateColumn() createdAt!: Date;
+}
+
+export const apiEntities = [FarmEntity, UserEntity, DeviceEntity, ReadingEntity, AlertEntity, SmsDeliveryEntity, AnchorBatchEntity, PolicyEntity];

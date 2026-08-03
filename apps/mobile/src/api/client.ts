@@ -8,6 +8,7 @@ export interface Farm { id: string; ownerName: string; phone: string; region: st
 export interface Reading { id?: string; deviceId: string; ts: number; tempC: number; humidityPct: number; nh3Ppm: number; alert: boolean; }
 export interface Alert { id: string; deviceId: string; ts: number; kind: string; value: number; acknowledged: boolean; deliveries?: Array<{ status: string; deliveryType: string; sentAt?: string }> }
 export interface AnchorBatch { id: string; deviceId: string; periodStart: number; periodEnd: number; readingCount: number; sha256: string; stellarTxHash: string; ledger: string; anchoredAt: number; }
+export interface Policy { id: string; farmId: string; deviceId: string; peril: 'TempHigh'; threshold: number; consecutivePeriods: number; payoutAmount: number; premium: number; status: 'active' | 'paid' | 'cancelled'; deviceLabel?: string; }
 
 async function request<T>(path: string, token?: string, init: RequestInit = {}): Promise<T> {
   const response = await fetch(`${API_URL}${path}`, { ...init, headers: { Accept: 'application/json', 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(init.headers ?? {}) } });
@@ -29,3 +30,4 @@ export const getAlerts = (token: string, since = 0) => request<Alert[]>(`/alerts
 export const acknowledgeAlert = (token: string, id: string) => request<Alert>(`/alerts/${id}/ack`, token, { method: 'POST' });
 export const getAnchors = (token: string, deviceId: string) => request<AnchorBatch[]>(`/devices/${deviceId}/anchors`, token);
 export const verifyAnchor = (token: string, deviceId: string, batchId: string) => request<{ verified: boolean; txUrl: string }>(`/devices/${deviceId}/anchors/${batchId}/verify`, token);
+export const getPolicies = (token: string, farmId: string) => request<Policy[]>(`/farms/${farmId}/policies`, token);

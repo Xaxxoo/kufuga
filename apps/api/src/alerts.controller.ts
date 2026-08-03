@@ -11,10 +11,10 @@ export class AlertsController {
   constructor(@InjectRepository(AlertEntity) private readonly alerts: Repository<AlertEntity>) {}
   @Get() list(@Query() query: SinceQueryDto) {
     const since = Number(query.since ?? 0);
-    return this.alerts.createQueryBuilder('a').where('a.ts >= :since', { since }).orderBy('a.ts', 'DESC').getMany();
+    return this.alerts.createQueryBuilder('a').leftJoinAndSelect('a.deliveries', 'd').where('a.ts >= :since', { since }).orderBy('a.ts', 'DESC').getMany();
   }
   @Post(':id/ack') async acknowledge(@Param('id') id: string) {
     await this.alerts.update(id, { acknowledged: true });
-    return this.alerts.findOneByOrFail({ id });
+    return this.alerts.findOneOrFail({ where: { id }, relations: { deliveries: true } });
   }
 }

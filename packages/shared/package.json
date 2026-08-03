@@ -6,5 +6,8 @@
   "scripts": { "build": "tsc -p tsconfig.json", "lint": "eslint . --ext .ts", "test": "vitest run" },
   "dependencies": { "zod": "^3.24.1" },
   "devDependencies": { "vitest": "^2.1.8" },
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } }
+  "exports": {
+    ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" },
+    "./thresholds": { "types": "./dist/thresholds.d.ts", "import": "./dist/thresholds.js" }
+  }
 }

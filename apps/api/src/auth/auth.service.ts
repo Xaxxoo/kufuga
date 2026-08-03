@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { config } from '../config';
 import { FarmEntity, UserEntity } from '../database/entities';
 import { LoginDto, RegisterDto } from './dto';
+import { PushTokenDto } from './push-token.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,11 @@ export class AuthService {
     const user = await this.users.findOneBy({ phone: dto.phone });
     if (!user || !(await compare(dto.pin, user.pinHash))) throw new UnauthorizedException('Invalid phone or PIN');
     return this.issueToken(user);
+  }
+
+  async savePushToken(userId: string, dto: PushTokenDto): Promise<{ registered: true }> {
+    await this.users.update(userId, { pushToken: dto.token, pushPlatform: dto.platform });
+    return { registered: true };
   }
 
   private issueToken(user: UserEntity) {

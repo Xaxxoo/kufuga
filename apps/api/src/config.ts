@@ -7,4 +7,8 @@ export const config = {
   mqttPassword: process.env.MQTT_PASSWORD,
   mqttClientId: process.env.MQTT_CLIENT_ID ?? 'kufuga-api',
   offlineAfterMinutes: Number(process.env.OFFLINE_AFTER_MINUTES ?? 30),
+  smsProvider: process.env.SMS_PROVIDER ?? 'console',
+  africasTalkingUsername: process.env.AT_USERNAME ?? '',
+  africasTalkingApiKey: process.env.AT_API_KEY ?? '',
+  africasTalkingFrom: process.env.AT_FROM ?? '',
 };

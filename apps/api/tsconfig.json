@@ -8,7 +8,7 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "baseUrl": ".",
-    "paths": { "@kufuga/shared": ["../../packages/shared/src/index.ts"] }
+    "paths": { "@kufuga/shared": ["../../packages/shared/src/index.ts"], "@kufuga/db": ["../../packages/db/src/index.ts"] }
   },
   "include": ["src/**/*.ts"]
 }

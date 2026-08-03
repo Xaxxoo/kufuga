@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { JwtAuthGuard } from './auth/auth.guard';
 import { AnchorBatchEntity, DeviceEntity, ReadingEntity } from './database/entities';
 import { ReadingsQueryDto } from './api.dto';
+import { AnchorVerificationService } from './anchor-verification.service';
 
 @Controller('devices')
 @UseGuards(JwtAuthGuard)
@@ -12,6 +13,7 @@ export class DevicesController {
     @InjectRepository(DeviceEntity) private readonly devices: Repository<DeviceEntity>,
     @InjectRepository(ReadingEntity) private readonly readings: Repository<ReadingEntity>,
     @InjectRepository(AnchorBatchEntity) private readonly anchors: Repository<AnchorBatchEntity>,
+    private readonly verification: AnchorVerificationService,
   ) {}
 
   @Get(':id/readings')
@@ -28,4 +30,7 @@ export class DevicesController {
 
   @Get(':id/anchors')
   anchorsFor(@Param('id') id: string) { return this.anchors.find({ where: { deviceId: id }, order: { periodStart: 'DESC' } }); }
+
+  @Get(':id/anchors/:batchId/verify')
+  verifyAnchor(@Param('id') id: string, @Param('batchId') batchId: string) { return this.verification.verify(id, batchId); }
 }

@@ -1,0 +1,8 @@
+{
+  "name": "@kufuga/db",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "build": "tsc -p tsconfig.json" },
+  "dependencies": { "typeorm": "^0.3.20" },
+  "exports": { ".": { "types": "./dist/index.d.ts", "require": "./dist/index.js", "default": "./dist/index.js" } }
+}

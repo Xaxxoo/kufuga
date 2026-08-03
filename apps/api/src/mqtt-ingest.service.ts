@@ -1,10 +1,11 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { telemetryReadingSchema, evaluateReading, type TelemetryReading } from '@kufuga/shared';
+import { telemetryReadingSchema, type TelemetryReading } from '@kufuga/shared';
 import mqtt, { type MqttClient } from 'mqtt';
 import { Repository } from 'typeorm';
 import { config } from './config';
-import { AlertEntity, DeviceEntity, ReadingEntity } from './database/entities';
+import { DeviceEntity, ReadingEntity } from './database/entities';
+import { AlertingService } from './notifications/alerting.service';
 
 @Injectable()
 export class MqttIngestService implements OnModuleInit, OnModuleDestroy {
@@ -16,7 +17,7 @@ export class MqttIngestService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @InjectRepository(DeviceEntity) private readonly devices: Repository<DeviceEntity>,
     @InjectRepository(ReadingEntity) private readonly readings: Repository<ReadingEntity>,
-    @InjectRepository(AlertEntity) private readonly alerts: Repository<AlertEntity>,
+    private readonly alerting: AlertingService,
   ) {}
 
   onModuleInit(): void {
@@ -49,12 +50,6 @@ export class MqttIngestService implements OnModuleInit, OnModuleDestroy {
       return entity;
     });
     await this.readings.insert(entities);
-    const alerts = batch.flatMap(({ reading, device }) => evaluateReading(reading, device.farm.birdType, 1).map((alert) => {
-      const entity = this.alerts.create();
-      Object.assign(entity, alert);
-      entity.id = undefined as unknown as string;
-      return entity;
-    }));
-    if (alerts.length) await this.alerts.insert(alerts);
+    for (const { reading, device } of batch) await this.alerting.processReading(reading, device);
   }
 }

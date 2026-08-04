@@ -1,6 +1,6 @@
 # Kufuga
 
-Kufuga is an IoT + blockchain poultry-farm monitoring platform for farms in Kenya and Ghana: ESP32 nodes collect NH3, temperature, and humidity readings, send them over GSM/MQTT, the backend ingests them into Postgres, mobile dashboards visualize farm health, SMS alerts notify operators, and hourly batch hashes are anchored on Stellar to provide tamper-proof audit trails for farm financing and parametric insurance.
+Kufuga is an IoT + blockchain poultry-farm monitoring platform for farms in Kenya, Ghana, Nigeria, Ethiopia, and Rwanda: ESP32 nodes collect NH3, temperature, and humidity readings, send them over GSM/MQTT, the backend ingests them into Postgres, mobile dashboards visualize farm health, SMS alerts notify operators, and hourly batch hashes are anchored on Stellar to provide tamper-proof audit trails for farm financing and parametric insurance.
 
 ## Local development
 

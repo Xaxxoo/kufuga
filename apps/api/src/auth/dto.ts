@@ -18,6 +18,6 @@ export class ProvisionDeviceDto {
   @IsString() farmId!: string;
   @IsString() @Length(1, 120) label!: string;
   @IsString() simNumber!: string;
-  @IsString() @Matches(/^(KE|GH)$/) country!: 'KE' | 'GH';
+  @IsString() @Matches(/^(KE|GH|NG|ET|RW)$/) country!: 'KE' | 'GH' | 'NG' | 'ET' | 'RW';
   @IsOptional() @IsInt() @Min(0) calibrationR0?: number;
 }

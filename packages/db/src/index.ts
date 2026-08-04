@@ -7,6 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import type { CountryCode } from '@kufuga/shared';
 
 const unixTransformer = {
   to: (value: number) => value,
@@ -46,7 +47,7 @@ export class DeviceEntity {
   @ManyToOne(() => FarmEntity, (farm) => farm.devices, { onDelete: 'CASCADE' }) farm!: FarmEntity;
   @Column('varchar') label!: string;
   @Column('varchar') simNumber!: string;
-  @Column({ type: 'varchar' }) country!: 'KE' | 'GH';
+  @Column({ type: 'varchar' }) country!: CountryCode;
   @Column('double precision') calibrationR0!: number;
   @Column('varchar') mqttUsername!: string;
   @Column('varchar') mqttPassword!: string;

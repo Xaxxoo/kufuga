@@ -3,7 +3,7 @@ import { Platform } from 'react-native';
 const API_URL = (process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000').replace(/\/$/, '');
 
 export interface AuthResponse { accessToken: string; user: { id: string; phone: string; role: string; farmId: string | null }; }
-export interface Device { id: string; farmId: string; label: string; simNumber: string; country: 'KE' | 'GH'; calibrationR0: number; createdAt: string; }
+export interface Device { id: string; farmId: string; label: string; simNumber: string; country: 'KE' | 'GH' | 'NG' | 'ET' | 'RW'; calibrationR0: number; createdAt: string; }
 export interface Farm { id: string; ownerName: string; phone: string; region: string; flockSize: number; birdType: 'broiler' | 'layer'; }
 export interface Reading { id?: string; deviceId: string; ts: number; tempC: number; humidityPct: number; nh3Ppm: number; alert: boolean; }
 export interface Alert { id: string; deviceId: string; ts: number; kind: string; value: number; acknowledged: boolean; deliveries?: Array<{ status: string; deliveryType: string; sentAt?: string }> }

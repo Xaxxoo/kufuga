@@ -2,6 +2,8 @@ import { z } from 'zod';
 
 const unixTimestamp = z.number().int().nonnegative();
 const isoTimestamp = z.string().datetime({ offset: true });
+export const countryCodeSchema = z.enum(['KE', 'GH', 'NG', 'ET', 'RW']);
+export type CountryCode = z.infer<typeof countryCodeSchema>;
 
 export const telemetryReadingSchema = z.object({
   deviceId: z.string().min(1),
@@ -18,7 +20,7 @@ export const deviceSchema = z.object({
   farmId: z.string().min(1),
   label: z.string().min(1),
   simNumber: z.string().min(1),
-  country: z.enum(['KE', 'GH']),
+  country: countryCodeSchema,
   calibrationR0: z.number().finite().nonnegative(),
   createdAt: isoTimestamp,
 });
@@ -68,4 +70,3 @@ export type AnchorBatch = z.infer<typeof anchorBatchSchema>;
 
 export const sensorReadingSchema = telemetryReadingSchema;
 export type SensorReading = TelemetryReading;
-

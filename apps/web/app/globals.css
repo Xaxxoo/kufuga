@@ -2,7 +2,72 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light; }
+:root {
+  color-scheme: light;
+  --color-bg: #f6faf8;
+  --color-surface: #ffffff;
+  --color-surface-hover: #e5f3eb;
+  --color-border: #dce9e2;
+  --color-border-subtle: #eef4f0;
+  --color-text: #173b2d;
+  --color-text-secondary: #6b7d74;
+  --color-text-muted: #8db8a4;
+  --color-primary: #176b4d;
+  --color-primary-hover: #12573f;
+  --color-accent: #e5f3eb;
+  --color-status-safe: #146b43;
+  --color-status-safe-bg: #d1f2e0;
+  --color-status-safe-border: #4fb87a;
+  --color-status-warn: #b45309;
+  --color-status-warn-bg: #fef3c7;
+  --color-status-warn-border: #f59e0b;
+  --color-status-danger: #b91c1c;
+  --color-status-danger-bg: #fee2e2;
+  --color-status-danger-border: #ef4444;
+  --color-status-safe-muted: #52635b;
+  --color-status-safe-muted-bg: #f0faf4;
+  --color-status-warn-muted: #92400e;
+  --color-status-warn-muted-bg: #fefbf0;
+  --color-status-danger-muted: #991b1b;
+  --color-status-danger-muted-bg: #fef2f2;
+}
+
+.dark {
+  color-scheme: dark;
+  --color-bg: #1a2420;
+  --color-surface: #2a3430;
+  --color-surface-hover: #3d4a44;
+  --color-border: #3d4a44;
+  --color-border-subtle: #2a3430;
+  --color-text: #eef4f0;
+  --color-text-secondary: #8db8a4;
+  --color-text-muted: #6b7d74;
+  --color-primary: #4fb87a;
+  --color-primary-hover: #90d4a8;
+  --color-accent: #112c21;
+  --color-status-safe: #6ee7b7;
+  --color-status-safe-bg: #064e3b;
+  --color-status-safe-border: #4fb87a;
+  --color-status-warn: #fcd34d;
+  --color-status-warn-bg: #78350f;
+  --color-status-warn-border: #f59e0b;
+  --color-status-danger: #fca5a5;
+  --color-status-danger-bg: #7f1d1d;
+  --color-status-danger-border: #ef4444;
+  --color-status-safe-muted: #8db8a4;
+  --color-status-safe-muted-bg: #112c21;
+  --color-status-warn-muted: #fde68a;
+  --color-status-warn-muted-bg: #5c2d0a;
+  --color-status-danger-muted: #fecaca;
+  --color-status-danger-muted-bg: #991b1b;
+}
+
 * { box-sizing: border-box; }
-body { background: #f6faf8; color: #173b2d; margin: 0; }
+body { background: var(--color-bg); color: var(--color-text); margin: 0; }
 button, input, select { font: inherit; }
+
+@layer utilities {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-moss focus-visible:ring-offset-2;
+  }
+}

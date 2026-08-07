@@ -1,0 +1,16 @@
+{
+  "name": "Kufuga",
+  "short_name": "Kufuga",
+  "description": "IoT poultry monitoring and tamper-evident farm records for Africa.",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#176b4d",
+  "background_color": "#f6faf8",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

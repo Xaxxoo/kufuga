@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "Kufuga",
+    "slug": "kufuga",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "backgroundColor": "#176b4d",
+      "resizeMode": "contain"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kufuga.app"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#176b4d"
+      },
+      "package": "com.kufuga.app"
+    },
+    "plugins": [
+      "expo-font"
+    ]
+  }
+}
